@@ -6,6 +6,12 @@
       :columns="columns"
       row-key="name"
     >
+      <template v-slot:body-cell-Estado="props">
+        <span :class="getStatusClass(props.row.Estado)">
+          {{ props.row.Estado }}
+        </span>
+      </template>
+      
       <template v-slot:body-cell-Editar="props">
         <q-btn 
           to="/Editar"
@@ -43,7 +49,6 @@ export default {
       { name: 'Editar', align: 'center', label: 'Acciones', field: 'acciones' } 
     ]
 
-
     const deleteRow = (row) => {
       const index = activityStore.activities.findIndex(activity => activity.name === row.name)
       if (index !== -1) {
@@ -51,11 +56,30 @@ export default {
       }
     }
 
+    const getStatusClass = (estado) => {
+      if (estado.toLowerCase() === 'activo') {
+        return 'text-green';
+      } else if (estado.toLowerCase() === 'inactivo') {
+        return 'text-red';
+      }
+      return '';
+    }
+
     return {
       columns,
       activityStore,
-      deleteRow
+      deleteRow,
+      getStatusClass
     }
   }
 }
 </script>
+
+<style scoped>
+.text-green {
+  color: green;
+}
+.text-red {
+  color: red;
+}
+</style>
