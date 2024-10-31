@@ -9,18 +9,16 @@ import { createPinia } from 'pinia'
 import piniapluginPersistedstate from 'pinia-plugin-persistedstate'
 
 
-const  pinia = createPinia()
 const app = createApp(App)
-
-app.use(pinia)
-app.use(router)
-
+const  pinia = createPinia()
 pinia.use (piniapluginPersistedstate)
 
-app.use(Quasar, {
-    plugins: {}, 
-  })
 
+app.use(Quasar, {
+  plugins: {}, 
+})
+app.use(pinia)
+app.use(router)
 app.mount('#app')
 
 

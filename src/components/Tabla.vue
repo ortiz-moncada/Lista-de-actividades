@@ -2,46 +2,59 @@
   <div class="q-pa-md">
     <q-table
       title="Lista de Tareas"
-      :rows="rows"
+      :rows="activityStore.activities"
       :columns="columns"
       row-key="name"
-    />
+    >
+      <template v-slot:body-cell-Editar="props">
+        <q-btn 
+          to="/Editar"
+          color="primary" 
+          icon="edit" 
+          @click="activityStore.selectActivity(props.row)" 
+          flat 
+          dense 
+          class="q-mr-sm"
+        />  
+        <q-btn 
+          color="negative" 
+          icon="delete" 
+          @click="deleteRow(props.row)" 
+          flat 
+          dense 
+        />
+      </template>
+    </q-table>
   </div>
 </template>
 
 <script>
-const columns = [
-  {
-    name: 'name',
-    required: true,
-    label: 'Actividad',
-    align: 'left',
-    field: row => row.name,
-    format: val => `${val}`,
-    sortable: true
-  },
-  { name: 'Descripcion', align: 'center', label: 'Descripcion',field:'Descripcion' },
-  { name: 'Fecha', label: 'Fecha ', field: 'Fecha'},
-  { name: 'Estado', label: 'Estado', field: 'Estado'},
-  { name: 'Editar', label: 'Editar', field: 'Editar'},
-]
-
-const rows = [
-  {
-    name: '',
-    Descripcion: 'holafasdsafa',
-    Fecha: 'dsfsdfs',
-    Estado: 'fdsfdsf',
-    Editar:'fdsfsfs',
-
-  },
-]
+import { useActivityStore } from '../stores/administrador.js'
 
 export default {
-  setup () {
+  setup() {
+    const activityStore = useActivityStore()
+
+    const columns = [
+      { name: 'Name', align: 'center', label: 'Name', field: 'name' },
+      { name: 'Descripcion', align: 'center', label: 'Descripcion', field: 'Descripcion' },
+      { name: 'Fecha', label: 'Fecha', field: 'Fecha' },
+      { name: 'Estado', label: 'Estado', field: 'Estado' },
+      { name: 'Editar', align: 'center', label: 'Acciones', field: 'acciones' } 
+    ]
+
+
+    const deleteRow = (row) => {
+      const index = activityStore.activities.findIndex(activity => activity.name === row.name)
+      if (index !== -1) {
+        activityStore.activities.splice(index, 1) 
+      }
+    }
+
     return {
       columns,
-      rows
+      activityStore,
+      deleteRow
     }
   }
 }

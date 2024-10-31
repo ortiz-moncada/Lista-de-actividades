@@ -5,8 +5,6 @@ import { createRouter, createWebHashHistory } from "vue-router"
 
 
 
-
-
 const routes =  [
     {path:"/", component: Tabla},
     {path:"/Nuevo", component:Nuevo},

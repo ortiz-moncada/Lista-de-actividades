@@ -1,18 +1,36 @@
-import { defineStore } from "pinia";
-import { ref } from "vue";
+// stores/activityStore.js
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
-export const useTheInformationStore = defineStore("theInformation", () => {
+export const useActivityStore = defineStore('activityStore', () => {
+  const activities = ref([])
+  const activitySelected = ref({
+    name: '',
+    Descripcion: '',
+    Fecha: '',
+    Estado: ''
+  })
 
-  const description = ref("");
-  const date = ref("");
-  const status = ref("");
+  const addActivity = (activity) => {
+    activities.value.push(activity)
+  }
 
+  function selectActivity(activity) {
+    activitySelected.value =activity
+  }
 
-  const setActivity = (activity) => {
-    description.value = activity.description;
-    date.value = activity.date;
-    status.value = activity.status;
-  };
+  function editActivity(updatedActivity) {
+    const index = activities.value.findIndex(activity => activity.name === updatedActivity.name)
+    if (index !== -1) {
+      activities.value[index] = { ...activities.value[index], ...updatedActivity }
+    }
+  }
 
-  return { description, date, status, setActivity };
-});
+  return {
+    activities,
+    addActivity,
+    selectActivity,
+    activitySelected,
+    editActivity
+  }
+})
